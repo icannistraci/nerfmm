@@ -1,0 +1,5 @@
+outs:
+- md5: cdc5fe1191aaa2b8e8d01e710f20d285.dir
+  size: 1484984
+  nfiles: 120
+  path: run000001

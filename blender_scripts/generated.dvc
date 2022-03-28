@@ -1,0 +1,5 @@
+outs:
+- md5: 6c47d229235289b9b6997b3a0a6dd7c4.dir
+  size: 1109324
+  nfiles: 2
+  path: generated
