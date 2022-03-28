@@ -36,7 +36,8 @@ def load_imgs(image_dir, num_img_to_load, start, end, skip, load_sorted, load_im
     img_list = []
     if load_img:
         for p in tqdm(img_paths):
-            img = imageio.imread(p)[:, :, :3]  # (H, W, 3) np.uint8
+            # img = imageio.imread(p)[:, :, :3]  # (H, W, 3) np.uint8
+            img = imageio.imread(p, pilmode='RGB')[:, :, :3]
             img_list.append(img)
         img_list = np.stack(img_list)  # (N, H, W, 3)
         img_list = torch.from_numpy(img_list).float() / 255  # (N, H, W, 3) torch.float32
