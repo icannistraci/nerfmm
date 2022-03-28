@@ -114,7 +114,8 @@ def test_one_epoch(H, W, focal_net, c2ws, near, far, model, my_devices, args):
 
 
 def main(args):
-    my_devices = torch.device('cuda:' + str(args.gpu_id))
+    # my_devices = torch.device('cuda:' + str(args.gpu_id))
+    my_devices = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     '''Create Folders'''
     test_dir = Path(os.path.join(args.ckpt_dir, 'render_spiral'))

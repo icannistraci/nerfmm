@@ -99,7 +99,7 @@ def gen_detail_name(args):
              '_seed_' + str(args.rand_seed) + \
              '_resize_' + str(args.resize_ratio) + \
              '_Nsam_' + str(args.num_sample) + \
-             '_Ntr_img_'+ str(args.train_img_num) + \
+             '_Ntr_img_' + str(args.train_img_num) + \
              '_freq_' + str(args.pos_enc_levels) + \
              '_' + str(args.alias) + \
              '_' + str(datetime.datetime.now().strftime('%y%m%d_%H%M'))
@@ -146,7 +146,8 @@ def model_render_image(c2w, rays_cam, t_vals, near, far, H, W, fxfy, model, pert
     # encode direction: (H, W, N_sample, (2L+1)*C = 27)
     if args.use_dir_enc:
         ray_dir_world = F.normalize(ray_dir_world, p=2, dim=2)  # (H, W, 3)
-        dir_enc = encode_position(ray_dir_world, levels=args.dir_enc_levels, inc_input=args.dir_enc_inc_in)  # (H, W, 27)
+        dir_enc = encode_position(ray_dir_world, levels=args.dir_enc_levels,
+                                  inc_input=args.dir_enc_inc_in)  # (H, W, 27)
         dir_enc = dir_enc.unsqueeze(2).expand(-1, -1, args.num_sample, -1)  # (H, W, N_sample, 27)
     else:
         dir_enc = None
@@ -176,7 +177,8 @@ def eval_one_epoch_img(eval_c2ws, scene_train, model, focal_net, pose_param_net,
 
     fxfy = focal_net(0)
     ray_dir_cam = comp_ray_dir_cam_fxfy(scene_train.H, scene_train.W, fxfy[0], fxfy[1])
-    t_vals = torch.linspace(scene_train.near, scene_train.far, args.num_sample, device=my_devices)  # (N_sample,) sample position
+    t_vals = torch.linspace(scene_train.near, scene_train.far, args.num_sample,
+                            device=my_devices)  # (N_sample,) sample position
     N_img = eval_c2ws.shape[0]
 
     rendered_img_list = []
@@ -239,7 +241,8 @@ def train_one_epoch(scene_train, optimizer_nerf, optimizer_focal, optimizer_pose
     else:
         focal_net.eval()
 
-    t_vals = torch.linspace(scene_train.near, scene_train.far, args.num_sample, device=my_devices)  # (N_sample,) sample position
+    t_vals = torch.linspace(scene_train.near, scene_train.far, args.num_sample,
+                            device=my_devices)  # (N_sample,) sample position
     N_img, H, W = scene_train.N_imgs, scene_train.H, scene_train.W
     L2_loss_epoch = []
 
@@ -295,7 +298,7 @@ def train_one_epoch(scene_train, optimizer_nerf, optimizer_focal, optimizer_pose
 
 
 def main(args):
-    my_devices = torch.device('cuda:' + str(args.gpu_id))
+    my_devices = torch.device('cpu')
 
     '''Create Folders'''
     exp_root_dir = Path(os.path.join('./logs/nerfmm', args.scene_name))
@@ -416,14 +419,22 @@ def main(args):
                 writer.add_scalar('eval/traj/rotation', eval_stats_rot['mean'], epoch_i)
                 writer.add_scalar('eval/traj/scale', eval_stats_scale['mean'], epoch_i)
 
-                logger.info('{0:6d} ep Traj Err: translation: {1:.6f}, rotation: {2:.2f} deg, scale: {3:.2f}'.format(epoch_i,
-                                                                                                                     eval_stats_tran['mean'],
-                                                                                                                     eval_stats_rot['mean'],
-                                                                                                                     eval_stats_scale['mean']))
-                tqdm.write('{0:6d} ep Traj Err: translation: {1:.6f}, rotation: {2:.2f} deg, scale: {3:.2f}'.format(epoch_i,
-                                                                                                                    eval_stats_tran['mean'],
-                                                                                                                    eval_stats_rot['mean'],
-                                                                                                                    eval_stats_scale['mean']))
+                logger.info(
+                    '{0:6d} ep Traj Err: translation: {1:.6f}, rotation: {2:.2f} deg, scale: {3:.2f}'.format(epoch_i,
+                                                                                                             eval_stats_tran[
+                                                                                                                 'mean'],
+                                                                                                             eval_stats_rot[
+                                                                                                                 'mean'],
+                                                                                                             eval_stats_scale[
+                                                                                                                 'mean']))
+                tqdm.write(
+                    '{0:6d} ep Traj Err: translation: {1:.6f}, rotation: {2:.2f} deg, scale: {3:.2f}'.format(epoch_i,
+                                                                                                             eval_stats_tran[
+                                                                                                                 'mean'],
+                                                                                                             eval_stats_rot[
+                                                                                                                 'mean'],
+                                                                                                             eval_stats_scale[
+                                                                                                                 'mean']))
 
                 fxfy = focal_net(0)
                 tqdm.write('Est fx: {0:.2f}, fy {1:.2f}, COLMAP focal: {2:.2f}'.format(fxfy[0].item(), fxfy[1].item(),

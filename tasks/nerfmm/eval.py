@@ -213,7 +213,8 @@ def opt_eval_pose_one_epoch(model, focal_net, eval_pose_param_net, scene_eval, o
 
 
 def main(args):
-    my_devices = torch.device('cuda:' + str(args.gpu_id))
+    # my_devices = torch.device('cuda:' + str(args.gpu_id))
+    my_devices = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     '''Create Folders'''
     test_dir = Path(os.path.join(args.ckpt_dir, 'render_' + args.type_to_eval))

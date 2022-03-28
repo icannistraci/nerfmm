@@ -241,7 +241,8 @@ def train_one_epoch(scene_train, optimizer_nerf, optimizer_focal, optimizer_pose
 
 
 def main(args):
-    my_devices = torch.device('cuda:' + str(args.gpu_id))
+    # my_devices = torch.device('cuda:' + str(args.gpu_id))
+    my_devices = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     '''Create Folders'''
     exp_root_dir = Path(os.path.join('./logs/any_folder', args.scene_name))

@@ -44,7 +44,8 @@ def parse_args():
 
 
 def main(args):
-    my_devices = torch.device('cpu')
+    # my_devices = torch.device('cuda:' + str(args.gpu_id))
+    my_devices = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     scene_train = DataLoaderAnyFolder(base_dir=args.base_dir,
                                       scene_name=args.scene_name,
