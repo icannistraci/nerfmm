@@ -19,3 +19,4 @@ dependencies:
     - lpips
     - scikit-image
     - open3d  # Only for 3d vis. Might require a physical monitor to install.
+    - dvc[gdrive]

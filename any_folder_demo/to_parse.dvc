@@ -1,0 +1,5 @@
+outs:
+- md5: d21e0acdf36be7da069499d3c9af5fb6.dir
+  size: 1392830
+  nfiles: 2
+  path: to_parse

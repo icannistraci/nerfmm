@@ -1,0 +1,5 @@
+outs:
+- md5: 1114c094a9585fb74679b9512cd40549.dir
+  size: 4163792
+  nfiles: 120
+  path: synthetic_clean_spheroid
